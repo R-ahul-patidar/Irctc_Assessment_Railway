@@ -1,0 +1,32 @@
+<!-- book_ticket.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Book Ticket</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}" />
+  </head>
+  <body>
+    <!-- Your existing HTML -->
+    <button id="bookBtn" onclick="openModal()">Book Ticket</button>
+
+    <!-- The Modal -->
+    <div id="bookingModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Book Ticket for {{ train.name }}</h2>
+        <form method="post" action="{% url 'book_ticket' train.id %}">
+          {% csrf_token %}
+          <input type="hidden" id="trainId" name="train_id" value="" />
+          <label for="seat_number">Seat Number:</label>
+          <input type="number" id="seat_number" name="seat_number" required />
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" required />
+          <!-- Add any other required fields here -->
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="{% static 'script.js' %}"></script>
+  </body>
+</html>

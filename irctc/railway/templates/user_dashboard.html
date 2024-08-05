@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Dashboard</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 80%;
+        margin: auto;
+        overflow: hidden;
+      }
+      header {
+        background: #333;
+        color: #fff;
+        padding: 10px 0;
+        text-align: center;
+      }
+      h1,
+      h2 {
+        color: #333;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        background: #fff;
+        margin: 5px 0;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      form {
+        margin: 20px 0;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+      }
+      button {
+        background: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Welcome, {{ user.username }}</h1>
+    </header>
+    <div class="container">
+      <h2>Your Bookings</h2>
+      {% if bookings %}
+      <ul>
+        {% for booking in bookings %}
+        <li>
+          Train: {{ booking.train.name }}, Seat: {{ booking.seat.number }},
+          Date: {{ booking.date }}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>You have no bookings.</p>
+      {% endif %}
+
+      <h2>Available Trains</h2>
+      {% if trains %}
+      <ul>
+        {% for train in trains %}
+        <li>
+          Train Id: {{ train.train_id }}, Train Name: {{ train.train_name }},
+          Total Seats: {{ train.total_seats }}, Route: {{ train.source }} to {{
+          train.destination }}, {% if train.available_seats > 0 %}
+          <a href="{% url 'make_booking' %}?train_id={{ train.id }}">
+            Book Now
+          </a>
+          {% else %} No seats available {% endif %}
+        </li>
+        {% empty %}
+        <p>No trains available.</p>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>No trains available.</p>
+      {% endif %}
+
+      <h2>Make a New Booking</h2>
+      <form method="post" action="{% url 'make_booking' %}">
+        {% csrf_token %} {{ form.as_p }}
+        <button type="submit">Book Now</button>
+      </form>
+    </div>
+  </body>
+</html>
